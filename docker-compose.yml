@@ -1,14 +1,14 @@
 version: '3.8'
 
 services:
-  recordsservice:
-    build:
-      context: ./RecordsService
-      dockerfile: Dockerfile
-    ports:
-      - 8080:8080
-    depends_on:
-      - db
+#  recordsservice:
+#    build:
+#      context: ./RecordsService
+#      dockerfile: Dockerfile
+#    ports:
+#      - 8080:8080
+#    depends_on:
+#      - db
 
   db:
     image: mysql

@@ -26,13 +26,13 @@ public class DbController {
     @GetMapping("/getPersonalId")
     public ResponseEntity<Person> getPersonByPersonalId(@RequestParam("personalId") String personalId) {
         Optional<Person> person = personRepository.findByPersonalId(personalId);
-        return person.isPresent()? ResponseEntity.ok(person.get()) : ResponseEntity.notFound().build();
+        return person.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/getLocation")
     public ResponseEntity<Person> getPersonByPersonalId(@RequestParam("location") Location location) {
         Optional<Person> person = personRepository.findByLocation(location);
-        return person.isPresent()? ResponseEntity.ok(person.get()) : ResponseEntity.notFound().build();
+        return person.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/getAll")
@@ -40,10 +40,16 @@ public class DbController {
         return personRepository.findAll();
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<Person> createPerson() {
+    @PostMapping("/testCreate")
+    public ResponseEntity<Person> testCreate() {
         Person anotherPerson = new Person("999999999", "Alice Mckenzie", Location.REGISTRATION);
         return new ResponseEntity<>(personRepository.save(anotherPerson), HttpStatus.CREATED);
     }
+
+    @PostMapping("/create")
+    public ResponseEntity<Person> create(@RequestBody Person person) {
+        Person savedPerson = personRepository.save(person);
+        return ResponseEntity.ok(savedPerson);
+    } 
 
 }
