@@ -22,5 +22,4 @@ public class Person {
         this.name = name;
         this.location = location;
     }
-
 }

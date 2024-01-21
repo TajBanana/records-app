@@ -3,7 +3,6 @@ package com.tajbanana.recordsservice.controller;
 import com.tajbanana.recordsservice.model.Location;
 import com.tajbanana.recordsservice.model.Person;
 import com.tajbanana.recordsservice.repositories.PersonRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,27 +22,21 @@ public class DbController {
         return ResponseEntity.ok("Hello World");
     }
 
-    @GetMapping("/getPersonalId")
-    public ResponseEntity<Person> getPersonByPersonalId(@RequestParam("personalId") String personalId) {
+    @GetMapping("/personalId/{personalId}")
+    public ResponseEntity<Person> getPersonByPersonalId(@PathVariable String personalId) {
         Optional<Person> person = personRepository.findByPersonalId(personalId);
         return person.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/getLocation")
-    public ResponseEntity<Person> getPersonByPersonalId(@RequestParam("location") Location location) {
-        Optional<Person> person = personRepository.findByLocation(location);
+    @GetMapping("/location/{locationName}")
+    public ResponseEntity<List<Person>> getAllByLocation(@PathVariable Location locationName) {
+        Optional<List<Person>> person = personRepository.findAllByLocation(locationName);
         return person.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/getAll")
+    @GetMapping("/all")
     public List<Person> getAll() {
         return personRepository.findAll();
-    }
-
-    @PostMapping("/testCreate")
-    public ResponseEntity<Person> testCreate() {
-        Person anotherPerson = new Person("999999999", "Alice Mckenzie", Location.REGISTRATION);
-        return new ResponseEntity<>(personRepository.save(anotherPerson), HttpStatus.CREATED);
     }
 
     @PostMapping("/create")
